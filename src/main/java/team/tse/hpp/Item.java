@@ -22,10 +22,12 @@ public interface Item {
 
     int getCommenters_();
 
+    void CommentersIncrement();
+
     void scoreDecrement();
 
     int getSumScore();
 
-    boolean IsMyComment(Comment comment);
+    boolean AddComment(Comment comment);
 
 }

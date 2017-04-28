@@ -9,11 +9,14 @@ import java.util.Date;
 
 public class Post implements Item {
 
-    protected int score_;// record the score of this post
-    protected ArrayList<Comment> liste_c;
+    private int score_;// record the score of this post
+    private ArrayList<Comment> liste_c;
+
     private Date ts_;
-    private int id_, user_id_;
-    private String contenu_, user_;
+    private int id_;
+    private int user_id_;
+    private String contenu_;
+    private String user_;
     private int commenters_;// record the number of commenters (excluding the post author) for the post
 
     public Post(String ts, String post_id, String user_id, String post, String user) {
@@ -64,6 +67,11 @@ public class Post implements Item {
     }
 
     @Override
+    public void CommentersIncrement() {
+        this.commenters_++;
+    }
+
+    @Override
     public void scoreDecrement() {
         if (this.score_ > 0)
             this.score_--;
@@ -82,20 +90,18 @@ public class Post implements Item {
     }
 
     @Override
-    public boolean IsMyComment(Comment comment) {
-        if (comment.getPost_commented_() == this.id_ || comment.getComment_replied_() == this.id_)
+    public boolean AddComment(Comment comment) {
+        if (comment.getPost_commented_() == this.id_ || comment.getComment_replied_() == this.id_) {
+            liste_c.add(comment);
+            CommentersIncrement();
             return true;
+        }
         for (Comment c : liste_c) {
-            if (c.IsMyComment(comment))
+            if (c.AddComment(comment)) {
+                c.CommentersIncrement();
                 return true;
+            }
         }
         return false;
     }
-
-//    public void commentersUpdate(Comment comment) {
-//        for (Comment c : liste_c) {
-//            if (!c.IsMyUser(comment))
-//                this.commenters_++;
-//        }
-//    }
 }

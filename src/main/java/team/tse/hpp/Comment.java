@@ -9,7 +9,8 @@ import java.util.Date;
 
 public class Comment extends Post {
 
-    private int comment_replied_, post_commented_;
+    private int comment_replied_;
+    private int post_commented_;
 
     public Comment(String ts, String comment_id, String user_id, String comment, String user, String comment_replied, String post_commented) {
         super(ts, comment_id, user_id, comment, user);
@@ -24,14 +25,5 @@ public class Comment extends Post {
     public int getPost_commented_() {
         return this.post_commented_;
     }
-//
-//    public boolean IsMyUser(Comment comment) {
-//        if (comment.getUser_id_() == this.user_id_)
-//            return true;
-//        for (Comment c : liste_c) {
-//            if (c.IsMyUser(comment))
-//                return true;
-//        }
-//        return false;
-//    }
+
 }
