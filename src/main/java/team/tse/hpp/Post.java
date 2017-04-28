@@ -3,6 +3,7 @@ package team.tse.hpp;
 import java.util.ArrayList;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -12,9 +13,9 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class Post implements Item {
 
+    DateTimeFormatter format_;
     private int score_;// record the score of this post
     private ArrayList<Comment> liste_c;
-
     private DateTime ts_;
     private int id_;
     private int user_id_;
@@ -24,9 +25,11 @@ public class Post implements Item {
 
     public Post(String ts, String post_id, String user_id, String post, String user) {
         /*format timestamp*/
-        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-//        DateTime dateTime = DateTime.parse("2012-12-21 23:22:45", format);
-        this.ts_ = DateTime.parse(ts, format);
+        this.format_ = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        this.ts_ = DateTime.parse(ts, this.format_).withZone(DateTimeZone.UTC);
+//        DateTimeZone correctTimeZone = this.ts_.getZone();
+//        this.ts_ = this.ts_.withZoneRetainFields(correctTimeZone);
+
         this.id_ = Integer.parseInt(post_id);
         this.user_id_ = Integer.parseInt(user_id);
         this.contenu_ = post;
@@ -38,8 +41,22 @@ public class Post implements Item {
     }
 
     @Override
+    public String toString() {
+        return ts_.toString(getFormat_()) +
+                "|" + id_ +
+                "|" + user_id_ +
+                "|" + contenu_ +
+                "|" + user_;
+    }
+
+    @Override
     public DateTime getTs_() {
         return ts_;
+    }
+
+    @Override
+    public DateTimeFormatter getFormat_() {
+        return format_;
     }
 
     @Override

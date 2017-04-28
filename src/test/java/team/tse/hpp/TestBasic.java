@@ -1,12 +1,13 @@
 package team.tse.hpp;
 
+/**
+ * Created by TGHead on 2017/4/28.
+ */
+
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-/**
- * Created by Administrator on 2017/4/28.
- */
 public class TestBasic {
     @Test
     public void test() {

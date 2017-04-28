@@ -1,8 +1,5 @@
 package team.tse.hpp;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 /**
  * Created by TGHead on 2017/4/27.
  */
@@ -25,6 +22,17 @@ public class Comment extends Post {
         } else {
             this.post_commented_ = -1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return getTs_().toString(getFormat_()) +
+                "|" + getId_() +
+                "|" + getUser_id_() +
+                "|" + getContenu_() +
+                "|" + getUser_() +
+                "|" + ((getComment_replied_() == -1) ? "" : getComment_replied_()) +
+                "|" + ((getPost_commented_() == -1) ? "" : getPost_commented_());
     }
 
     public int getComment_replied_() {
