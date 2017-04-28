@@ -3,6 +3,10 @@ package team.tse.hpp;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 /**
  * Created by TGHead on 2017/4/27.
  */
@@ -12,7 +16,7 @@ public class Post implements Item {
     private int score_;// record the score of this post
     private ArrayList<Comment> liste_c;
 
-    private Date ts_;
+    private DateTime ts_;
     private int id_;
     private int user_id_;
     private String contenu_;
@@ -20,7 +24,11 @@ public class Post implements Item {
     private int commenters_;// record the number of commenters (excluding the post author) for the post
 
     public Post(String ts, String post_id, String user_id, String post, String user) {
-        this.ts_ = new Date(Long.parseLong(ts));
+        this.ts_ = new DateTime();
+        DateTimeFormatter format = DateTimeFormat .forPattern("yyyy-MM-ddTHH:mm:ss.SSSa");    
+        
+        //时间解析    
+        DateTime dateTime = DateTime.parse("2012-12-21 23:22:45", format);  
         this.id_ = Integer.parseInt(post_id);
         this.user_id_ = Integer.parseInt(user_id);
         this.contenu_ = post;
@@ -32,7 +40,7 @@ public class Post implements Item {
     }
 
     @Override
-    public Date getTs_() {
+    public DateTime getTs_() {
         return ts_;
     }
 
