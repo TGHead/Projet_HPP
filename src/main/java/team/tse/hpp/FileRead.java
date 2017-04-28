@@ -11,6 +11,14 @@ public class FileRead {
 
 	ArrayList<Item> items=new ArrayList<Item>();
 
+    private boolean flagPostProcess_;
+    private boolean flagCommentProcess_;
+
+    public FileRead() {
+        this.flagPostProcess_ = false;
+        this.flagCommentProcess_ = false;
+    }
+
     public static void main(String[] args) {
         FileRead read = new FileRead();
 
@@ -20,41 +28,47 @@ public class FileRead {
         System.out.println(read.items.get(0).getTs_());
     }
 
-    public boolean postRead(BufferedReader reader, Post post) {
+    public Post postRead(BufferedReader reader) {
         String string;
-        String[] postString = null;
-		try{
+        String[] postString;
+        Post post = null;
+        try{
             if ((string = reader.readLine()) != null) {
                 postString=string.split("\\|");
                 post = new Post(postString[0], postString[1], postString[2], postString[3], postString[4]);
+                this.flagPostProcess_ = true;
             }
 			else{
-                return false;
+                this.flagPostProcess_ = false;
+                return null;
             }
 
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-        return true;
+        return post;
     }
 
-    public boolean commentRead(BufferedReader reader, Comment comment) {
-        String string=null;
-		String[] postString = null;
-		try{
+    public Comment commentRead(BufferedReader reader) {
+        String string;
+        String[] postString;
+        Comment comment = null;
+        try{
 			if((string=reader.readLine())!=null){
 				postString=string.split("\\|");
                 comment = new Comment(postString[0], postString[1], postString[2], postString[3],
                         postString[4], postString[5], postString[6]);
+                this.flagCommentProcess_ = true;
             }
 			else{
-                return false;
+                this.flagCommentProcess_ = false;
+                return null;
             }
 
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-        return true;
+        return comment;
     }
 
     public void packList(){
@@ -80,26 +94,23 @@ public class FileRead {
         Post post = null;
 		Comment comment = null;
 
-        boolean flagPostProcess = postRead(postReader, post);
-        boolean flagCommentProcess = commentRead(commentReader, comment);
-
-        while (flagPostProcess == true || flagCommentProcess == true) {
-            if (flagPostProcess == true && flagCommentProcess == true) {
-                if(post.getTs_().compareTo(comment.getTs_())>1){
-					items.add(comment);
-					flagCommentProcess=commentRead(commentReader,comment);
-				}
+        while (flagPostProcess_ == true || flagCommentProcess_ == true) {
+            if (flagPostProcess_ == true && flagCommentProcess_ == true) {
+                if (post.getTs_().compareTo(comment.getTs_()) > 1) {
+                    items.add(comment);
+                    comment = commentRead(commentReader);
+                }
 				else{
 					items.add(post);
-					flagPostProcess=postRead(postReader,post);
-				}
-            } else if (flagPostProcess == true) {
+                    post = postRead(postReader);
+                }
+            } else if (flagPostProcess_ == true) {
                 items.add(post);
-				flagPostProcess=postRead(postReader,post);
+                post = postRead(postReader);
             } else {
                 items.add(comment);
-				flagCommentProcess=commentRead(commentReader,comment);
-			}
+                comment = commentRead(commentReader);
+            }
 		};
 
     }
