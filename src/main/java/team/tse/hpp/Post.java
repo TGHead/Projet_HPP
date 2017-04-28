@@ -1,7 +1,6 @@
 package team.tse.hpp;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -24,11 +23,10 @@ public class Post implements Item {
     private int commenters_;// record the number of commenters (excluding the post author) for the post
 
     public Post(String ts, String post_id, String user_id, String post, String user) {
-        this.ts_ = new DateTime();
-        DateTimeFormatter format = DateTimeFormat .forPattern("yyyy-MM-ddTHH:mm:ss.SSSa");    
-        
-        //时间解析    
-        DateTime dateTime = DateTime.parse("2012-12-21 23:22:45", format);  
+        /*format timestamp*/
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+//        DateTime dateTime = DateTime.parse("2012-12-21 23:22:45", format);
+        this.ts_ = DateTime.parse(ts, format);
         this.id_ = Integer.parseInt(post_id);
         this.user_id_ = Integer.parseInt(user_id);
         this.contenu_ = post;

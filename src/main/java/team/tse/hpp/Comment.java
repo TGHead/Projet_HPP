@@ -14,8 +14,17 @@ public class Comment extends Post {
 
     public Comment(String ts, String comment_id, String user_id, String comment, String user, String comment_replied, String post_commented) {
         super(ts, comment_id, user_id, comment, user);
-        this.comment_replied_ = Integer.parseInt(comment_replied);
-        this.post_commented_ = Integer.parseInt(post_commented);
+        if (!comment_replied.isEmpty()) {
+            this.comment_replied_ = Integer.parseInt(comment_replied);
+        } else {
+            this.comment_replied_ = -1;
+        }
+
+        if (!post_commented.isEmpty()) {
+            this.post_commented_ = Integer.parseInt(post_commented);
+        } else {
+            this.post_commented_ = -1;
+        }
     }
 
     public int getComment_replied_() {
