@@ -21,11 +21,24 @@ public class FileRead {
 
     public static void main(String[] args) {
         FileRead read = new FileRead();
+        
+        File fileComment =new File("D:\\comments.dat");
+		BufferedReader commentReader = null;
 
-        read.packList();
-        System.out.println(read.items.get(0).getTs_());
-        System.out.println(read.items.get(0).getTs_());
-        System.out.println(read.items.get(0).getTs_());
+        try {
+			commentReader = new BufferedReader(new FileReader(fileComment));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+        Comment comment=read.commentRead(commentReader);
+        int i=0;
+        while(read.flagCommentProcess_==true){
+        	read.items.add(comment);
+        	System.out.println(read.items.get(i).getTs_());
+        	comment=read.commentRead(commentReader);
+        	i++;
+        }
+        
     }
 
     public Post postRead(BufferedReader reader) {
@@ -55,7 +68,7 @@ public class FileRead {
         Comment comment = null;
         try{
 			if((string=reader.readLine())!=null){
-				postString=string.split("\\|");
+				postString=string.split("\\|",-1);
                 comment = new Comment(postString[0], postString[1], postString[2], postString[3],
                         postString[4], postString[5], postString[6]);
                 this.flagCommentProcess_ = true;
@@ -93,7 +106,8 @@ public class FileRead {
 
         Post post = null;
 		Comment comment = null;
-
+		comment = commentRead(commentReader);
+		post = postRead(postReader);
         while (flagPostProcess_ == true || flagCommentProcess_ == true) {
             if (flagPostProcess_ == true && flagCommentProcess_ == true) {
                 if (post.getTs_().compareTo(comment.getTs_()) > 1) {
