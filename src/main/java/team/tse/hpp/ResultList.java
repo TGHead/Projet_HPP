@@ -1,82 +1,96 @@
 package team.tse.hpp;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-public class ResultList {
-	public List<Post> listResult;
-	private List<Post> listRankResult;
-	
-	public ResultList()
-	{
-		listResult=new LinkedList<Post>();
-		listRankResult=new LinkedList<Post>();
-	}
-	
-	public List<Post> consumeItem(Item item)
-	{
-		
-		DateTime dateMoment=item.getTs_();
+import java.util.List;
 
-		for(Post p :listResult )
-		{
-			DateTime dateOld=p.getTs_();
-			int numDate=Days.daysBetween(dateMoment, dateOld).getDays();
-			while(numDate<=0)
-			{
-				p.scoreDecrement();//进行扣分
-				//删去分为0的post
-				if(p.getScore_()<=0)
-				{
-					listResult.remove(p);
-					break;
-				}
-					
-				numDate--;
-			} 
-			if(item.getClass()==Post.class)
-				listResult.add((Post) item);
-			else
-			{
-				if(p.AddComment((Comment)item))
+public class ResultList {
+
+	private List<Post> listResult_;
+	private boolean listeChanged_;
+
+	private DateTime currentTime_;
+
+	public ResultList(List<Post> listResult)
+	{
+		this.listResult_ = listResult;
+		this.listeChanged_ = false;
+
+		this.currentTime_ = null;
+	}
+
+	public DateTime getCurrentTime() {
+		return this.currentTime_;
+	}
+
+	public boolean getListeChanged() {
+		return this.listeChanged_;
+	}
+
+	private void itemUpdate(Item item) {
+		for (int i = 0; i < this.listResult_.size(); i++) {
+
+			Post p = this.listResult_.get(i);
+//			int numDate=Days.daysBetween(p.getTs_(), item.getTs_()).getDays();
+//
+//			while(numDate > p.getLifeDays())
+//			{
+//				p.scoreDecrement();//进行扣分
+//				numDate--;
+//			}
+//			p.LifeDaysIncrement(Days.daysBetween(p.getTs_(), item.getTs_()).getDays() - p.getLifeDays());
+			p.scoreDecrement(item.getTs_());
+
+			//删去分为0的post
+			if (p.getSumScore() == 0) {
+				this.listResult_.remove(p);
+				i--;
+			}
+		}
+	}
+
+	private void AddPost(Post post, int oldIdx) {
+		int idx = this.listResult_.size();
+		for (Post p : this.listResult_) {
+			if (p.getSumScore() <= post.getSumScore()) {
+				idx = this.listResult_.indexOf(p);
 				break;
 			}
 		}
-		
-		listResult.sort((o1,o2)->((Post)o1).getScore_()-((Post)o2).getScore_());
-		if(nochangeRank())
-			return null;
-		else{
-			for(int i=0;i<3;i++)
-			{
-				Post a=listResult.get(i);
-				if(a!=null)
-					listRankResult.add(a);
-				else
-					break;
-			}
-			return listRankResult;
+		if (idx < 3 && oldIdx != idx) {
+			this.listeChanged_ = true;
 		}
-		
+		this.listResult_.add(idx, post);
 	}
-		
-	private boolean nochangeRank()
-	  { 	
-	  		for(int i=0;i<3;i++)
-	  		{
-	  			Post a=listResult.get(i);
-	  			Post b=listRankResult.get(i);
-	  			if(a==null&&b==null)
-	  				return true;
-	  			else if(a==null ||b==null)
-	  				return false;
-	  			else if(a.getScore_()!=b.getScore_())
-	  				return false;
-	  		}
-	  		return true;
-	  
-	  }
+
+	private void AddComment(Comment comment) {
+		for (Post p : this.listResult_) {
+			if (p.AddComment(comment)) {
+				int idx = this.listResult_.indexOf(p);
+				this.listResult_.remove(p);
+				AddPost(p, idx);
+				break;
+			}
+		}
+	}
+
+	public void consumeItem(Item item) {
+		if (this.listResult_.size() == 0 || Days.daysBetween(this.currentTime_, item.getTs_()).getDays() > 0) {
+			this.listeChanged_ = false;
+		} else {
+			this.listeChanged_ = false;
+		}
+
+		this.currentTime_ = item.getTs_();
+
+		itemUpdate(item);
+
+		if (item.getClass() == Post.class)
+			AddPost((Post) item, -1);
+		else {
+			AddComment((Comment) item);
+		}
+	}
+
 }

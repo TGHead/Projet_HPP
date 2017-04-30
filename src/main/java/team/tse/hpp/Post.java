@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -14,13 +15,14 @@ import org.joda.time.format.DateTimeFormatter;
 public class Post implements Item {
 
     DateTimeFormatter format_;
-    private int score_;// record the score of this post
     private ArrayList<Comment> liste_c;
     private DateTime ts_;
     private int id_;
     private int user_id_;
     private String contenu_;
     private String user_;
+    private int lifeDays_;
+    private int score_;// record the score of this post
     private int commenters_;// record the number of commenters (excluding the post author) for the post
 
     public Post(String ts, String post_id, String user_id, String post, String user) {
@@ -36,6 +38,7 @@ public class Post implements Item {
         this.user_ = user;
 
         this.score_ = 10;
+        this.lifeDays_ = 0;
         this.commenters_ = 0;
         this.liste_c = new ArrayList<Comment>();
     }
@@ -85,21 +88,42 @@ public class Post implements Item {
     }
 
     @Override
+    public int getLifeDays() {
+        return lifeDays_;
+    }
+
+    @Override
     public int getCommenters_() {
         return commenters_;
     }
 
     @Override
-    public void CommentersIncrement() {
+    public void CommentersIncrement(Comment comment) {
+        for (Comment c : liste_c) {
+            if (comment.getUser_id_() == c.getUser_id_()) {
+                return;
+            }
+        }
         this.commenters_++;
     }
 
     @Override
-    public void scoreDecrement() {
-        if (this.score_ > 0)
-            this.score_--;
+    public void LifeDaysIncrement(int delta) {
+        this.lifeDays_ += delta;
+    }
+
+    @Override
+    public void scoreDecrement(DateTime cur_time) {
+        int numDate = Days.daysBetween(getTs_(), cur_time).getDays();
+        while (numDate > getLifeDays()) {
+            if (this.score_ > 0) {
+                this.score_--;
+            }
+            numDate--;
+        }
+        LifeDaysIncrement(Days.daysBetween(getTs_(), cur_time).getDays() - getLifeDays());
         for (Comment c : liste_c) {
-            c.scoreDecrement();
+            c.scoreDecrement(cur_time);
         }
     }
 
@@ -115,13 +139,13 @@ public class Post implements Item {
     @Override
     public boolean AddComment(Comment comment) {
         if (comment.getPost_commented_() == this.id_ || comment.getComment_replied_() == this.id_) {
+            CommentersIncrement(comment);
             liste_c.add(comment);
-            CommentersIncrement();
             return true;
         }
         for (Comment c : liste_c) {
             if (c.AddComment(comment)) {
-                c.CommentersIncrement();
+                c.CommentersIncrement(comment);
                 return true;
             }
         }

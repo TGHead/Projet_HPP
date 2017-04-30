@@ -94,7 +94,7 @@ public class FileRead {
 
         while (flagPostProcess_ == true || flagCommentProcess_ == true) {
             if (flagPostProcess_ == true && flagCommentProcess_ == true) {
-                if (post.getTs_().compareTo(comment.getTs_()) > 1) {
+                if (post.getTs_().compareTo(comment.getTs_()) > 0) {
                     items_.add(comment);
                     comment = commentRead(commentReader);
                 }

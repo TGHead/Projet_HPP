@@ -25,11 +25,15 @@ public interface Item {
 
     int getCommenters_();
 
-    void CommentersIncrement();
+    void CommentersIncrement(Comment comment);
 
-    void scoreDecrement();
+    void LifeDaysIncrement(int delta);
+
+    void scoreDecrement(DateTime cur_time);
 
     int getSumScore();
+
+    int getLifeDays();
 
     boolean AddComment(Comment comment);
 
