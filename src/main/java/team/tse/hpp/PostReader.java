@@ -7,12 +7,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public class PostReader implement Runnable{
+public class PostReader implements Runnable{
 	
 	private BlockingQueue<Item> queuePost;
 	private boolean flagPostProcess_;
 	private String postfilepath_;
-	public Poducer(BlockingQueue<Item> queuePost,String postfilepath){
+	public PostReader(BlockingQueue<Item> queuePost,String postfilepath){
 		this.queuePost=queuePost;
 		this.postfilepath_=postfilepath;
 	}
@@ -41,7 +41,12 @@ public class PostReader implement Runnable{
         }
         Post endRead=new Post("2010-02-01T05:12:32.921+0000","-1","3981","photo299101.jpg","Michael Wang");
         
-        queuePost.put(endRead);
+        try {
+			queuePost.put(endRead);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
 	}
 	 private Post postRead(BufferedReader reader) {
