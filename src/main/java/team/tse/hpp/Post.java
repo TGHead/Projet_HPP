@@ -92,6 +92,10 @@ public class Post implements Item {
         return lifeDays_;
     }
 
+    private void setLifeDays(int days) {
+        this.lifeDays_ = days;
+    }
+
     @Override
     public int getCommenters_() {
         return commenters_;
@@ -108,20 +112,15 @@ public class Post implements Item {
     }
 
     @Override
-    public void LifeDaysIncrement(int delta) {
-        this.lifeDays_ += delta;
-    }
-
-    @Override
     public void scoreDecrement(DateTime cur_time) {
-        int numDate = Days.daysBetween(getTs_(), cur_time).getDays();
-        while (numDate > getLifeDays()) {
+        int numDate = Days.daysBetween(getTs_(), cur_time).getDays() - getLifeDays();
+        while (numDate > 0) {
             if (this.score_ > 0) {
                 this.score_--;
             }
             numDate--;
         }
-//        LifeDaysIncrement(Days.daysBetween(getTs_(), cur_time).getDays() - getLifeDays());
+        setLifeDays(Days.daysBetween(getTs_(), cur_time).getDays());
         for (Comment c : liste_c) {
             c.scoreDecrement(cur_time);
         }

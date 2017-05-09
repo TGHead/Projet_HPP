@@ -27,7 +27,7 @@ public interface Item {
 
     void CommentersIncrement(Comment comment);
 
-    void LifeDaysIncrement(int delta);
+//    void setLifeDays(int days);
 
     void scoreDecrement(DateTime cur_time);
 
