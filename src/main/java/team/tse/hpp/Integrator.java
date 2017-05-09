@@ -42,14 +42,14 @@ public class Integrator implements Runnable {
                 if (post.getTs_().compareTo(comment.getTs_()) > 0) {
                     try {
                         q_items_.put(comment);
-                        comment = q_comments_.poll();
+                        comment = q_comments_.take();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 } else {
                     try {
                         q_items_.put(post);
-                        post = q_posts_.poll();
+                        post = q_posts_.take();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -58,14 +58,14 @@ public class Integrator implements Runnable {
             } else if (post.getId_() != -1) {
                 try {
                     q_items_.put(post);
-                    post = q_posts_.poll();
+                    post = q_posts_.take();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             } else {
                 try {
                     q_items_.put(comment);
-                    comment = q_comments_.poll();
+                    comment = q_comments_.take();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

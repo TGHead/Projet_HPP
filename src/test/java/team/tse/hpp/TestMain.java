@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 public class TestMain {
-    private final String postfilepath = "src/test/Test resources/Tests/Q1PostExpiredComment2/posts.dat";
-    private final String commentfilepath = "src/test/Test resources/Tests/Q1PostExpiredComment2/comments.dat";
-    private final String expectedfilepath = "src/test/Test resources/Tests/Q1PostExpiredComment2/_expectedQ1.txt";
+    private final String postfilepath = "src/test/Test resources/Tests/Q1CommentCount/posts.dat";
+    private final String commentfilepath = "src/test/Test resources/Tests/Q1CommentCount/comments.dat";
+    private final String expectedfilepath = "src/test/Test resources/Tests/Q1CommentCount/_expectedQ1.txt";
 
     private Main main;
     private BufferedReader filereader;

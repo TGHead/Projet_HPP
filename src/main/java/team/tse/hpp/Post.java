@@ -121,7 +121,7 @@ public class Post implements Item {
             }
             numDate--;
         }
-        LifeDaysIncrement(Days.daysBetween(getTs_(), cur_time).getDays() - getLifeDays());
+//        LifeDaysIncrement(Days.daysBetween(getTs_(), cur_time).getDays() - getLifeDays());
         for (Comment c : liste_c) {
             c.scoreDecrement(cur_time);
         }

@@ -47,7 +47,6 @@ public class CommentReader implements Runnable {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
         File fileComment = new File(commentfilepath_);
         BufferedReader commentReader = null;
 
@@ -62,18 +61,20 @@ public class CommentReader implements Runnable {
         {
 	        try {
 				commentList_.put(comment);
-				comment=commentRead(commentReader);
+
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-	        
-	        try {
-	            commentReader.close();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
+			comment = commentRead(commentReader);
+
 		}
+		try {
+			commentReader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
         try {
             commentList_.put(new Comment("2010-02-01T05:12:32.921+0000", "-1", "-1", " ", " ", "-1", "-1"));
         } catch (InterruptedException e) {

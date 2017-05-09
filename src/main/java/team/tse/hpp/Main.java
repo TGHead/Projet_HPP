@@ -27,7 +27,7 @@ public class Main {
     private PostReader postReader_;
     private CommentReader commentReader_;
     private Integrator integrator_;
-    //    private FileRead file_;
+
     private ResultList result_;
 
     public Main(String postfilepath, String commentfilepath) {

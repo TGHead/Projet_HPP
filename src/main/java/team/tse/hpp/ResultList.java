@@ -32,14 +32,7 @@ public class ResultList {
 		for (int i = 0; i < this.listResult_.size(); i++) {
 
 			Post p = this.listResult_.get(i);
-//			int numDate=Days.daysBetween(p.getTs_(), item.getTs_()).getDays();
-//
-//			while(numDate > p.getLifeDays())
-//			{
-//				p.scoreDecrement();//进行扣分
-//				numDate--;
-//			}
-//			p.LifeDaysIncrement(Days.daysBetween(p.getTs_(), item.getTs_()).getDays() - p.getLifeDays());
+
 			p.scoreDecrement(item.getTs_());
 
 			//删去分为0的post
@@ -77,7 +70,7 @@ public class ResultList {
 
 	public void consumeItem(Item item) {
 		if (this.listResult_.size() == 0 || Days.daysBetween(this.currentTime_, item.getTs_()).getDays() > 0) {
-			this.listeChanged_ = false;
+			this.listeChanged_ = true;
 		} else {
 			this.listeChanged_ = false;
 		}
