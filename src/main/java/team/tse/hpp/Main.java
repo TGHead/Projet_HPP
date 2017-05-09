@@ -5,6 +5,8 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Created by TGHead on 2017/4/28.
@@ -17,7 +19,10 @@ public class Main {
 
     private List<Item> items_;
     private List<Post> listResult_;
+    
+    private BlockingQueue<Item> commentList_;
 
+    private CommentReader commentReader_;
     private FileRead file_;
     private ResultList result_;
 
@@ -29,7 +34,14 @@ public class Main {
         this.listResult_ = new LinkedList<Post>();
 
         this.file_ = new FileRead(this.items_, this.postfilepath_, this.commentfilepath_);
+        
+        this.commentList_=new ArrayBlockingQueue<Item>(100);
+        this.commentReader_=new CommentReader(commentList_,this.commentfilepath_);
+        
         this.result_ = new ResultList(this.listResult_);
+        
+
+        
     }
 
     private String showResult() {
