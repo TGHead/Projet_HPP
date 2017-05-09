@@ -120,7 +120,7 @@ public class Post implements Item {
             }
             numDate--;
         }
-        setLifeDays(Days.daysBetween(getTs_(), cur_time).getDays());
+        setLifeDays(Days.daysBetween(getTs_(), cur_time).getDays() - numDate);
         for (Comment c : liste_c) {
             c.scoreDecrement(cur_time);
         }
@@ -144,7 +144,7 @@ public class Post implements Item {
         }
         for (Comment c : liste_c) {
             if (c.AddComment(comment)) {
-                c.CommentersIncrement(comment);
+//                c.CommentersIncrement(comment);
                 return true;
             }
         }
