@@ -9,3 +9,5 @@ more information on : [DEBS 2016](http://www.ics.uci.edu/~debs2016/call-grand-ch
 ## Project Structure:
 
 ### Producer Schema:
+
+![Producer Schema](README/Producer%20Schema.jpg)
