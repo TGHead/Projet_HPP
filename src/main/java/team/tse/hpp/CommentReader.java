@@ -75,8 +75,8 @@ public class CommentReader implements Runnable {
 	        }
 		}
         try {
-        		commentList_.put(new Comment("", "-1", "", "", "", "", ""));
-		} catch (InterruptedException e) {
+            commentList_.put(new Comment("2010-02-01T05:12:32.921+0000", "-1", "-1", " ", " ", "-1", "-1"));
+        } catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 	        

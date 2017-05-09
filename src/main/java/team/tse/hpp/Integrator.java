@@ -24,10 +24,21 @@ public class Integrator implements Runnable {
     }
 
     public void Integrate() {
-        Item post = q_posts_.poll();
-        Item comment = q_comments_.poll();
-        while (post != null || comment != null) {
-            if (post != null && comment != null) {
+        Item post = null;
+        try {
+            post = q_posts_.take();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Item comment = null;
+        try {
+            comment = q_comments_.take();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while (post.getId_() != -1 || comment.getId_() != -1) {
+
+            if (post.getId_() != -1 && comment.getId_() != -1) {
                 if (post.getTs_().compareTo(comment.getTs_()) > 0) {
                     try {
                         q_items_.put(comment);
@@ -44,7 +55,7 @@ public class Integrator implements Runnable {
                     }
 
                 }
-            } else if (post != null) {
+            } else if (post.getId_() != -1) {
                 try {
                     q_items_.put(post);
                     post = q_posts_.poll();
