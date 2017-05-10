@@ -49,29 +49,38 @@ public class ResultList {
 		}
 	}
 
-	private void AddPost(Post post, int oldIdx) {
-		int idx = this.listResult_.size();
-		for (Post p : this.listResult_) {
-			if (p.getSumScore() <= post.getSumScore()) {
-				idx = this.listResult_.indexOf(p);
-				break;
-			}
-		}
-		if (idx < 3 && oldIdx != idx) {
-			this.listeChanged_ = true;
-		}
-		this.listResult_.add(idx, post);
+	private void AddPost(Post post) {
+//		int idx = this.listResult_.size();
+//		for (Post p : this.listResult_) {
+//			if (p.getSumScore() <= post.getSumScore()) {
+//				idx = this.listResult_.indexOf(p);
+//				break;
+//			}
+//		}
+//		if (idx < 3 && oldIdx != idx) {
+//			this.listeChanged_ = true;
+//		}
+//		this.listResult_.add(idx, post);
+		postMap_.put(post.getId_(), post);
 	}
 
 	private void AddComment(Comment comment) {
-		for (Post p : this.listResult_) {
-			if (p.AddComment(comment)) {
-				int idx = this.listResult_.indexOf(p);
-				this.listResult_.remove(p);
-				AddPost(p, idx);
-				break;
-			}
+//		for (Post p : this.listResult_) {
+//			if (p.AddComment(comment)) {
+//				int idx = this.listResult_.indexOf(p);
+//				this.listResult_.remove(p);
+//				AddPost(p, idx);
+//				break;
+//			}
+//		}
+		commentMap_.put(comment.getId_(),comment);
+		Comment flag=comment;
+		while(flag.getPost_commented_()==-1){
+			flag=commentMap_.get(flag.getComment_replied_());
 		}
+		Post post=postMap_.get(flag.getPost_commented_());
+		post.AddComment(flag);
+		AddPost(post);
 	}
 
 	public void consumeItem(Item item) {
@@ -83,10 +92,10 @@ public class ResultList {
 
 		this.currentTime_ = item.getTs_();
 
-		itemUpdate(item);
+		//itemUpdate(item);
 
 		if (item.getClass() == Post.class)
-			AddPost((Post) item, -1);
+			AddPost((Post) item);
 		else {
 			AddComment((Comment) item);
 		}

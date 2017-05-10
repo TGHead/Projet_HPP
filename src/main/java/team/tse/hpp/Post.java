@@ -137,17 +137,17 @@ public class Post implements Item {
 
     @Override
     public boolean AddComment(Comment comment) {
-        if (comment.getPost_commented_() == this.id_ || comment.getComment_replied_() == this.id_) {
+//        if (comment.getPost_commented_() == this.id_ || comment.getComment_replied_() == this.id_) {
             CommentersIncrement(comment);
             liste_c.add(comment);
             return true;
-        }
-        for (Comment c : liste_c) {
-            if (c.AddComment(comment)) {
-//                c.CommentersIncrement(comment);
-                return true;
-            }
-        }
-        return false;
+//        }
+//        for (Comment c : liste_c) {
+//            if (c.AddComment(comment)) {
+////                c.CommentersIncrement(comment);
+//                return true;
+//            }
+//        }
+//        return false;
     }
 }
