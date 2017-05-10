@@ -3,6 +3,8 @@ package team.tse.hpp;
 import java.util.ArrayList;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -12,34 +14,52 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class Post implements Item {
 
-    private int score_;// record the score of this post
+    DateTimeFormatter format_;
     private ArrayList<Comment> liste_c;
-
     private DateTime ts_;
     private int id_;
     private int user_id_;
     private String contenu_;
     private String user_;
+    private int lifeDays_;
+    private int score_;// record the score of this post
     private int commenters_;// record the number of commenters (excluding the post author) for the post
 
     public Post(String ts, String post_id, String user_id, String post, String user) {
         /*format timestamp*/
-        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-//        DateTime dateTime = DateTime.parse("2012-12-21 23:22:45", format);
-        this.ts_ = DateTime.parse(ts, format);
+        this.format_ = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        this.ts_ = DateTime.parse(ts, this.format_).withZone(DateTimeZone.UTC);
+//        DateTimeZone correctTimeZone = this.ts_.getZone();
+//        this.ts_ = this.ts_.withZoneRetainFields(correctTimeZone);
+
         this.id_ = Integer.parseInt(post_id);
         this.user_id_ = Integer.parseInt(user_id);
         this.contenu_ = post;
         this.user_ = user;
 
         this.score_ = 10;
+        this.lifeDays_ = 0;
         this.commenters_ = 0;
         this.liste_c = new ArrayList<Comment>();
     }
 
     @Override
+    public String toString() {
+        return ts_.toString(getFormat_()) +
+                "|" + id_ +
+                "|" + user_id_ +
+                "|" + contenu_ +
+                "|" + user_;
+    }
+
+    @Override
     public DateTime getTs_() {
         return ts_;
+    }
+
+    @Override
+    public DateTimeFormatter getFormat_() {
+        return format_;
     }
 
     @Override
@@ -68,21 +88,41 @@ public class Post implements Item {
     }
 
     @Override
+    public int getLifeDays() {
+        return lifeDays_;
+    }
+
+    private void setLifeDays(int days) {
+        this.lifeDays_ = days;
+    }
+
+    @Override
     public int getCommenters_() {
         return commenters_;
     }
 
     @Override
-    public void CommentersIncrement() {
+    public void CommentersIncrement(Comment comment) {
+        for (Comment c : liste_c) {
+            if (comment.getUser_id_() == c.getUser_id_()) {
+                return;
+            }
+        }
         this.commenters_++;
     }
 
     @Override
-    public void scoreDecrement() {
-        if (this.score_ > 0)
-            this.score_--;
+    public void scoreDecrement(DateTime cur_time) {
+        int numDate = Days.daysBetween(getTs_(), cur_time).getDays() - getLifeDays();
+        while (numDate > 0) {
+            if (this.score_ > 0) {
+                this.score_--;
+            }
+            numDate--;
+        }
+        setLifeDays(Days.daysBetween(getTs_(), cur_time).getDays() - numDate);
         for (Comment c : liste_c) {
-            c.scoreDecrement();
+            c.scoreDecrement(cur_time);
         }
     }
 
@@ -98,13 +138,13 @@ public class Post implements Item {
     @Override
     public boolean AddComment(Comment comment) {
         if (comment.getPost_commented_() == this.id_ || comment.getComment_replied_() == this.id_) {
+            CommentersIncrement(comment);
             liste_c.add(comment);
-            CommentersIncrement();
             return true;
         }
         for (Comment c : liste_c) {
             if (c.AddComment(comment)) {
-                c.CommentersIncrement();
+//                c.CommentersIncrement(comment);
                 return true;
             }
         }

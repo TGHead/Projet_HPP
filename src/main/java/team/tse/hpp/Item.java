@@ -1,16 +1,17 @@
 package team.tse.hpp;
 
-import java.util.Date;
-
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
- * Created by Administrator on 2017/4/28.
+ * Created by TGHead on 2017/4/28.
  */
 
 public interface Item {
 
     DateTime getTs_();
+
+    DateTimeFormatter getFormat_();
 
     int getId_();
 
@@ -24,11 +25,15 @@ public interface Item {
 
     int getCommenters_();
 
-    void CommentersIncrement();
+    void CommentersIncrement(Comment comment);
 
-    void scoreDecrement();
+//    void setLifeDays(int days);
+
+    void scoreDecrement(DateTime cur_time);
 
     int getSumScore();
+
+    int getLifeDays();
 
     boolean AddComment(Comment comment);
 
