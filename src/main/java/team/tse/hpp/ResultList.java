@@ -3,7 +3,9 @@ package team.tse.hpp;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ResultList {
 
@@ -11,6 +13,8 @@ public class ResultList {
 	private boolean listeChanged_;
 
 	private DateTime currentTime_;
+	private Map<Integer,Post> postMap_;
+	private Map<Integer,Comment> commentMap_;
 
 	public ResultList(List<Post> listResult)
 	{
@@ -18,6 +22,8 @@ public class ResultList {
 		this.listeChanged_ = false;
 
 		this.currentTime_ = null;
+		this.postMap_=new HashMap<Integer,Post>();
+		this.commentMap_=new HashMap<Integer,Comment>();
 	}
 
 	public DateTime getCurrentTime() {
