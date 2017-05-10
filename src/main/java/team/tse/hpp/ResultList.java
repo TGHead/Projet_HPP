@@ -4,8 +4,10 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class ResultList {
 
@@ -35,17 +37,43 @@ public class ResultList {
 	}
 
 	private void itemUpdate(Item item) {
-		for (int i = 0; i < this.listResult_.size(); i++) {
-
-			Post p = this.listResult_.get(i);
-
+//		for (int i = 0; i < this.listResult_.size(); i++) {
+//
+//			Post p = this.listResult_.get(i);
+//
+//			p.scoreDecrement(item.getTs_());
+//
+//			//删去分为0的post
+//			if (p.getSumScore() == 0) {
+//				this.listResult_.remove(p);
+//				i--;
+//			}
+//		}
+		
+		for (Entry<Integer,Post> entry : postMap_.entrySet()) 
+		{
+			Post p =entry.getValue();
 			p.scoreDecrement(item.getTs_());
-
-			//删去分为0的post
-			if (p.getSumScore() == 0) {
-				this.listResult_.remove(p);
-				i--;
+			if(p.getSumScore()==0)
+				this.postMap_.remove(entry.getKey());
+			else
+			{
+				listeChanged_=listResult_.removeIf(e->e.getSumScore()==0);
+				int i=0;
+				do
+				{
+					if(listResult_.get(i).getSumScore()<p.getSumScore())
+					{
+						listResult_.add(i, p);
+						listeChanged_=true;
+						if(listResult_.size()>3)
+							listResult_=listResult_.subList(0, 3);
+						break;
+					}
+					i++;
+				}while(i<listResult_.size());
 			}
+			
 		}
 	}
 
@@ -92,13 +120,15 @@ public class ResultList {
 
 		this.currentTime_ = item.getTs_();
 
-		//itemUpdate(item);
+
 
 		if (item.getClass() == Post.class)
 			AddPost((Post) item);
 		else {
 			AddComment((Comment) item);
 		}
+		
+		itemUpdate(item);
 	}
 
 }
