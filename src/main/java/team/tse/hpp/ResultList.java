@@ -5,6 +5,7 @@ import org.joda.time.Days;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -49,7 +50,7 @@ public class ResultList {
 //				i--;
 //			}
 //		}
-		
+		List<Post> newResult=new LinkedList<Post>();
 		for (Entry<Integer,Post> entry : postMap_.entrySet()) 
 		{
 			Post p =entry.getValue();
@@ -58,23 +59,39 @@ public class ResultList {
 				this.postMap_.remove(entry.getKey());
 			else
 			{
-				listeChanged_=listResult_.removeIf(e->e.getSumScore()==0);
-				int i=0;
-				do
+				//listeChanged_=listResult_.removeIf(e->e.getSumScore()==0);
+				if(newResult.size()==0){
+					newResult.add(p);
+					//listeChanged_=true;
+				}
+				
+				else for(int i=0;i<newResult.size();i++)
 				{
-					if(listResult_.get(i).getSumScore()<p.getSumScore())
+					if(newResult.get(i).getSumScore()<p.getSumScore())
 					{
-						listResult_.add(i, p);
-						listeChanged_=true;
-						if(listResult_.size()>3)
-							listResult_=listResult_.subList(0, 3);
+						newResult.add(i, p);
+						//listeChanged_=true;
+						if(newResult.size()>3)
+							newResult=newResult.subList(0, 3);
+						break;
+					}else if(newResult.size()<3&&i==newResult.size()-1){
+						newResult.add(newResult.size(),p);
 						break;
 					}
-					i++;
-				}while(i<listResult_.size());
+				}
+
 			}
 			
 		}
+		if(newResult.equals(listResult_)){
+			listeChanged_=false;
+		}else{
+			listeChanged_=true;
+			listResult_.clear();
+			for(Post p:newResult){
+				listResult_.add(p);
+			}
+			}
 	}
 
 	private void AddPost(Post post) {
@@ -108,15 +125,14 @@ public class ResultList {
 		}
 		Post post=postMap_.get(flag.getPost_commented_());
 		post.AddComment(flag);
-		AddPost(post);
 	}
 
 	public void consumeItem(Item item) {
-		if (this.listResult_.size() == 0 || Days.daysBetween(this.currentTime_, item.getTs_()).getDays() > 0) {
-			this.listeChanged_ = true;
-		} else {
-			this.listeChanged_ = false;
-		}
+//		if (this.listResult_.size() == 0 || Days.daysBetween(this.currentTime_, item.getTs_()).getDays() > 0) {
+//			this.listeChanged_ = true;
+//		} else {
+//			this.listeChanged_ = false;
+//		}
 
 		this.currentTime_ = item.getTs_();
 
