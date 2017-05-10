@@ -74,7 +74,16 @@ public class ResultList {
 						if(newResult.size()>3)
 							newResult=newResult.subList(0, 3);
 						break;
-					}else if(newResult.size()<3&&i==newResult.size()-1){
+					}else if(newResult.get(i).getSumScore()==p.getSumScore()){
+						if(newResult.get(i).getTs_().compareTo(p.getTs_())<0){
+							newResult.add(i, p);
+							//listeChanged_=true;
+							if(newResult.size()>3)
+								newResult=newResult.subList(0, 3);
+							break;
+						}
+					}
+					else if(newResult.size()<3&&i==newResult.size()-1){
 						newResult.add(newResult.size(),p);
 						break;
 					}
