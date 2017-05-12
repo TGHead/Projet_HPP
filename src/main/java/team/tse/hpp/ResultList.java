@@ -38,25 +38,18 @@ public class ResultList {
 	}
 
 	private void itemUpdate(Item item) {
-//		for (int i = 0; i < this.listResult_.size(); i++) {
-//
-//			Post p = this.listResult_.get(i);
-//
-//			p.scoreDecrement(item.getTs_());
-//
-//			//删去分为0的post
-//			if (p.getSumScore() == 0) {
-//				this.listResult_.remove(p);
-//				i--;
-//			}
-//		}
+
 		List<Post> newResult=new LinkedList<Post>();
-		for (Entry<Integer,Post> entry : postMap_.entrySet()) 
-		{
+//		for (Entry<Integer,Post> entry : postMap_.entrySet())
+		Iterator<Entry<Integer, Post>> it = postMap_.entrySet().iterator();
+		while(it.hasNext()){
+			Entry<Integer, Post> entry = it.next();
 			Post p =entry.getValue();
 			p.scoreDecrement(item.getTs_(),item.getUser_id_());
-			if(p.getSumScore()==0)
-				this.postMap_.remove(entry.getKey());
+			if(p.getSumScore() == 0 || (p.getSumScore() == 10 && p.getScore_() == 0)) {
+//				this.postMap_.remove(entry.getKey());
+				it.remove();
+			}
 			else
 			{
 				//listeChanged_=listResult_.removeIf(e->e.getSumScore()==0);
@@ -104,49 +97,22 @@ public class ResultList {
 	}
 
 	private void AddPost(Post post) {
-//		int idx = this.listResult_.size();
-//		for (Post p : this.listResult_) {
-//			if (p.getSumScore() <= post.getSumScore()) {
-//				idx = this.listResult_.indexOf(p);
-//				break;
-//			}
-//		}
-//		if (idx < 3 && oldIdx != idx) {
-//			this.listeChanged_ = true;
-//		}
-//		this.listResult_.add(idx, post);
 		postMap_.put(post.getId_(), post);
 	}
 
 	private void AddComment(Comment comment) {
-//		for (Post p : this.listResult_) {
-//			if (p.AddComment(comment)) {
-//				int idx = this.listResult_.indexOf(p);
-//				this.listResult_.remove(p);
-//				AddPost(p, idx);
-//				break;
-//			}
-//		}
 		commentMap_.put(comment.getId_(),comment);
 		Comment flag=comment;
 		while(flag.getPost_commented_()==-1){
 			flag=commentMap_.get(flag.getComment_replied_());
 		}
 		Post post=postMap_.get(flag.getPost_commented_());
-		post.AddComment(flag);
+		post.AddComment(comment);
 	}
 
 	public void consumeItem(Item item) {
-//		if (this.listResult_.size() == 0 || Days.daysBetween(this.currentTime_, item.getTs_()).getDays() > 0) {
-//			this.listeChanged_ = true;
-//		} else {
-//			this.listeChanged_ = false;
-//		}
 
 		this.currentTime_ = item.getTs_();
-
-
-
 		if (item.getClass() == Post.class)
 			AddPost((Post) item);
 		else {
