@@ -3,32 +3,73 @@ package team.tse.hpp;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.BlockingQueue;
 
-public class ResultList {
+public class ResultList implements Runnable{
 
 	private List<Post> listResult_;
 	private boolean listeChanged_;
-
+	private BlockingQueue<Item> itemsQueue_;
 	private DateTime currentTime_;
 	private Map<Integer,Post> postMap_;
 	private Map<Integer,Comment> commentMap_;
-
-	public ResultList(List<Post> listResult)
+	ArrayList<String> resLine ;
+	public ResultList(List<Post> listResult,BlockingQueue<Item> itemsQueue,ArrayList<String> resLine)
 	{
 		this.listResult_ = listResult;
 		this.listeChanged_ = false;
-
+		this.itemsQueue_=itemsQueue;
 		this.currentTime_ = null;
 		this.postMap_=new HashMap<Integer,Post>();
 		this.commentMap_=new HashMap<Integer,Comment>();
+		this.resLine=resLine;
 	}
-
+	public void run(){
+        Item item = null;
+        try {
+            item = itemsQueue_.take();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while(item.getId_()!=-1){
+        consumeItem(item);
+        if (getListeChanged()) {
+            resLine.add(showResult());
+        }
+        try {
+            item = itemsQueue_.take();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        }
+        
+	}
+    private String showResult() {
+        String sout = this.getCurrentTime().toString(this.itemsQueue_.poll().getFormat_()) + ",";
+        for (int i = 0; i < Math.min(3, this.listResult_.size()); i++) {
+            sout += this.listResult_.get(i).getId_() + ","
+                    + this.listResult_.get(i).getUser_() + ","
+                    + this.listResult_.get(i).getSumScore() + ","
+                    + this.listResult_.get(i).getCommenters_();
+            if (i < 2) {
+                sout += ",";
+            }
+        }
+        for (int i = 0; i < 3 - this.listResult_.size(); i++) {
+            sout += "-,-,-,-";
+            if (i < 2 - this.listResult_.size()) {
+                sout += ",";
+            }
+        }
+        return sout;
+    }
 	public DateTime getCurrentTime() {
 		return this.currentTime_;
 	}

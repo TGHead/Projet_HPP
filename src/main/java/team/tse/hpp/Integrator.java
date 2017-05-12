@@ -71,6 +71,13 @@ public class Integrator implements Runnable {
                 }
             }
         }
+        Item itemEnd=new Post("2010-02-01T05:12:32.921+0000","-1","3981","photo299101.jpg","Michael Wang");
+        try {
+			q_items_.put(itemEnd);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     @Override
