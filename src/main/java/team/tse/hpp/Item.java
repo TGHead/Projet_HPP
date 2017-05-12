@@ -27,13 +27,7 @@ public interface Item {
 
     void CommentersIncrement(Comment comment);
 
-//    void setLifeDays(int days);
-
-    void scoreDecrement(DateTime cur_time);
-
     int getSumScore();
-
-    int getLifeDays();
 
     boolean AddComment(Comment comment);
 

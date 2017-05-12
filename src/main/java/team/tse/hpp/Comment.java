@@ -1,5 +1,10 @@
 package team.tse.hpp;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
+import java.util.List;
+
 /**
  * Created by TGHead on 2017/4/27.
  */
@@ -41,6 +46,33 @@ public class Comment extends Post {
 
     public int getPost_commented_() {
         return this.post_commented_;
+    }
+
+    public boolean scoreDecrement(DateTime cur_time, int user_id, List<Integer> user_id_list) {
+        int numDate = Days.daysBetween(getTs_(), cur_time).getDays();
+        boolean score_zero = false;
+
+        for (Comment c : liste_c) {
+            if (c.scoreDecrement(cur_time, user_id, user_id_list)) {
+                for (int zero_score_user_id : user_id_list) {
+                    commentersIndex_.put(zero_score_user_id, commentersIndex_.get(zero_score_user_id) - 1);
+                    if (commentersIndex_.get(zero_score_user_id) == 0)
+                        commentersIndex_.remove(zero_score_user_id);
+                }
+                score_zero = true;
+            }
+        }
+
+        if (getScore_() > 0) {
+            this.score_ = 10 - numDate;
+            if (this.score_ <= 0) {
+                this.score_ = 0;
+                user_id_list.add(getUser_id_());
+                score_zero = true;
+            }
+        }
+        return score_zero;
+//        setLifeDays(Days.daysBetween(getTs_(), cur_time).getDays() - numDate);
     }
 
 }

@@ -54,7 +54,7 @@ public class ResultList {
 		for (Entry<Integer,Post> entry : postMap_.entrySet()) 
 		{
 			Post p =entry.getValue();
-			p.scoreDecrement(item.getTs_());
+			p.scoreDecrement(item.getTs_(),item.getUser_id_());
 			if(p.getSumScore()==0)
 				this.postMap_.remove(entry.getKey());
 			else
