@@ -1,7 +1,8 @@
-package team.tse.hpp;
+package team.tse.hpp.data_structure;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
+import team.tse.hpp.data_structure.Comment;
 
 /**
  * Created by TGHead on 2017/4/28.

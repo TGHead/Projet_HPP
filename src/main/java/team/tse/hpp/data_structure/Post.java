@@ -1,4 +1,4 @@
-package team.tse.hpp;
+package team.tse.hpp.data_structure;
 
 import java.util.ArrayList;
 import java.util.HashMap;

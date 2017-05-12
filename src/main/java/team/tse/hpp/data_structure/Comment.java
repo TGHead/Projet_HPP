@@ -1,4 +1,4 @@
-package team.tse.hpp;
+package team.tse.hpp.data_structure;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;

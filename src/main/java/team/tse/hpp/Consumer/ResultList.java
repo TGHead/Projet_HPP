@@ -1,7 +1,10 @@
-package team.tse.hpp;
+package team.tse.hpp.Consumer;
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormatter;
+import team.tse.hpp.data_structure.Comment;
+import team.tse.hpp.data_structure.Item;
+import team.tse.hpp.data_structure.Post;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,28 +34,30 @@ public class ResultList implements Runnable{
 		this.commentMap_=new HashMap<Integer,Comment>();
 		this.resLine=resLine;
 	}
-	public void run(){
-        Item item = null;
-        try {
-            item = itemsQueue_.take();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        while(item.getId_()!=-1){
-        consumeItem(item);
-        if (getListeChanged()) {
-            resLine.add(showResult());
-        }
-        try {
-            item = itemsQueue_.take();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        }
-        
+
+	@Override
+	public void run() {
+		Item item = null;
+		try {
+			item = itemsQueue_.take();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		while (item.getId_() != -1) {
+			consumeItem(item);
+			if (getListeChanged()) {
+				resLine.add(showResult(item.getFormat_()));
+			}
+			try {
+				item = itemsQueue_.take();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
-    private String showResult() {
-        String sout = this.getCurrentTime().toString(this.itemsQueue_.poll().getFormat_()) + ",";
+    private String showResult(DateTimeFormatter formatter) {
+        String sout = this.getCurrentTime().toString(formatter) + ",";
         for (int i = 0; i < Math.min(3, this.listResult_.size()); i++) {
             sout += this.listResult_.get(i).getId_() + ","
                     + this.listResult_.get(i).getUser_() + ","
@@ -94,7 +99,7 @@ public class ResultList implements Runnable{
 			else
 			{
 				//listeChanged_=listResult_.removeIf(e->e.getSumScore()==0);
-				if(newResult.size()==0){
+				if(newResult.isEmpty()){
 					newResult.add(p);
 					//listeChanged_=true;
 				}
@@ -124,17 +129,17 @@ public class ResultList implements Runnable{
 				}
 
 			}
-			
+
 		}
-		if(newResult.equals(listResult_)){
-			listeChanged_=false;
-		}else{
-			listeChanged_=true;
+		if (newResult.equals(listResult_)) {
+			listeChanged_ = false;
+		} else {
+			listeChanged_ = true;
 			listResult_.clear();
-			for(Post p:newResult){
+			for (Post p : newResult) {
 				listResult_.add(p);
 			}
-			}
+		}
 	}
 
 	private void AddPost(Post post) {

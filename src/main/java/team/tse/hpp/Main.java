@@ -1,6 +1,11 @@
 package team.tse.hpp;
 
-import org.joda.time.DateTime;
+import team.tse.hpp.Consumer.ResultList;
+import team.tse.hpp.data_structure.Item;
+import team.tse.hpp.data_structure.Post;
+import team.tse.hpp.producer.CommentReader;
+import team.tse.hpp.producer.Integrator;
+import team.tse.hpp.producer.PostReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,7 +34,7 @@ public class Main {
     private Integrator integrator_;
 
     private ResultList result_;
-    private ArrayList<String> resLine = new ArrayList<String>();
+    private ArrayList<String> resLine_ = new ArrayList<String>();
     public Main(String postfilepath, String commentfilepath) {
 //        this.postfilepath_ = postfilepath;
 //        this.commentfilepath_ = commentfilepath;
@@ -45,7 +50,7 @@ public class Main {
         this.commentReader_ = new CommentReader(commentQueue_, commentfilepath);
         this.integrator_ = new Integrator(itemsQueue_, postQueue_, commentQueue_);
         
-        this.result_ = new ResultList(this.listResult_,this.itemsQueue_,resLine);
+        this.result_ = new ResultList(this.listResult_,this.itemsQueue_,this.resLine_);
 
     }
 
@@ -115,6 +120,6 @@ public class Main {
 //            }
 //        }
         
-        return resLine;
+        return resLine_;
     }
 }

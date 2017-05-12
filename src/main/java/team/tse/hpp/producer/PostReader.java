@@ -1,4 +1,7 @@
-package team.tse.hpp;
+package team.tse.hpp.producer;
+
+import team.tse.hpp.data_structure.Item;
+import team.tse.hpp.data_structure.Post;
 
 import java.io.BufferedReader;
 import java.io.File;
