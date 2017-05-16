@@ -11,19 +11,19 @@ import java.util.List;
 
 public class Comment extends Post {
 
-    private int comment_replied_;
-    private int post_commented_;
+    private long comment_replied_;
+    private long post_commented_;
 
     public Comment(String ts, String comment_id, String user_id, String comment, String user, String comment_replied, String post_commented) {
         super(ts, comment_id, user_id, comment, user);
         if (!comment_replied.isEmpty()) {
-            this.comment_replied_ = Integer.parseInt(comment_replied);
+            this.comment_replied_ = Long.parseLong(comment_replied);
         } else {
             this.comment_replied_ = -1;
         }
 
         if (!post_commented.isEmpty()) {
-            this.post_commented_ = Integer.parseInt(post_commented);
+            this.post_commented_ = Long.parseLong(post_commented);
         } else {
             this.post_commented_ = -1;
         }
@@ -40,21 +40,21 @@ public class Comment extends Post {
                 "|" + ((getPost_commented_() == -1) ? "" : getPost_commented_());
     }
 
-    public int getComment_replied_() {
+    public long getComment_replied_() {
         return this.comment_replied_;
     }
 
-    public int getPost_commented_() {
+    public long getPost_commented_() {
         return this.post_commented_;
     }
 
-    public boolean scoreDecrement(DateTime cur_time, int user_id, List<Integer> user_id_list) {
+    public boolean scoreDecrement(DateTime cur_time, long user_id, List<Long> user_id_list) {
         int numDate = Days.daysBetween(getTs_(), cur_time).getDays();
         boolean score_zero = false;
 
         for (Comment c : liste_c) {
             if (c.scoreDecrement(cur_time, user_id, user_id_list)) {
-                for (int zero_score_user_id : user_id_list) {
+                for (long zero_score_user_id : user_id_list) {
                     commentersIndex_.put(zero_score_user_id, commentersIndex_.get(zero_score_user_id) - 1);
                     if (commentersIndex_.get(zero_score_user_id) == 0)
                         commentersIndex_.remove(zero_score_user_id);

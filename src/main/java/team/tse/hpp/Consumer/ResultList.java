@@ -21,8 +21,8 @@ public class ResultList implements Runnable{
 	private boolean listeChanged_;
 	private BlockingQueue<Item> itemsQueue_;
 	private DateTime currentTime_;
-	private Map<Integer,Post> postMap_;
-	private Map<Integer,Comment> commentMap_;
+	private Map<Long,Post> postMap_;
+	private Map<Long,Comment> commentMap_;
 	ArrayList<String> resLine ;
 	public ResultList(List<Post> listResult,BlockingQueue<Item> itemsQueue,ArrayList<String> resLine)
 	{
@@ -30,8 +30,8 @@ public class ResultList implements Runnable{
 		this.listeChanged_ = false;
 		this.itemsQueue_=itemsQueue;
 		this.currentTime_ = null;
-		this.postMap_=new HashMap<Integer,Post>();
-		this.commentMap_=new HashMap<Integer,Comment>();
+		this.postMap_=new HashMap<Long,Post>();
+		this.commentMap_=new HashMap<Long,Comment>();
 		this.resLine=resLine;
 	}
 
@@ -73,6 +73,7 @@ public class ResultList implements Runnable{
                 sout += ",";
             }
         }
+        System.out.println(sout);
         return sout;
     }
 	public DateTime getCurrentTime() {
@@ -87,9 +88,9 @@ public class ResultList implements Runnable{
 
 		List<Post> newResult=new LinkedList<Post>();
 //		for (Entry<Integer,Post> entry : postMap_.entrySet())
-		Iterator<Entry<Integer, Post>> it = postMap_.entrySet().iterator();
+		Iterator<Entry<Long, Post>> it = postMap_.entrySet().iterator();
 		while(it.hasNext()){
-			Entry<Integer, Post> entry = it.next();
+			Entry<Long, Post> entry = it.next();
 			Post p =entry.getValue();
 			p.scoreDecrement(item.getTs_(),item.getUser_id_());
 			if(p.getSumScore() == 0 || (p.getSumScore() == 10 && p.getScore_() == 0)) {
@@ -151,9 +152,13 @@ public class ResultList implements Runnable{
 		Comment flag=comment;
 		while(flag.getPost_commented_()==-1){
 			flag=commentMap_.get(flag.getComment_replied_());
+			if(flag==null)
+				return;
 		}
 		Post post=postMap_.get(flag.getPost_commented_());
-		post.AddComment(comment);
+		if(post!=null){
+			post.AddComment(comment);
+		}
 	}
 
 	public void consumeItem(Item item) {
@@ -161,7 +166,7 @@ public class ResultList implements Runnable{
 		this.currentTime_ = item.getTs_();
 		if (item.getClass() == Post.class)
 			AddPost((Post) item);
-		else {
+		else{
 			AddComment((Comment) item);
 		}
 		

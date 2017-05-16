@@ -19,13 +19,13 @@ public class Post implements Item {
     DateTimeFormatter format_;
     protected ArrayList<Comment> liste_c;
     protected DateTime ts_;
-    protected int id_;
-    protected int user_id_;
+    protected long id_;
+    protected long user_id_;
     protected String contenu_;
     protected String user_;
     protected int score_;// record the score of this post
 
-    protected HashMap<Integer, Integer> commentersIndex_;
+    protected HashMap<Long, Integer> commentersIndex_;
 
 
     public Post(String ts, String post_id, String user_id, String post, String user) {
@@ -33,15 +33,15 @@ public class Post implements Item {
         this.format_ = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         this.ts_ = DateTime.parse(ts, this.format_).withZone(DateTimeZone.UTC);
 
-        this.id_ = Integer.parseInt(post_id);
-        this.user_id_ = Integer.parseInt(user_id);
+        this.id_ = Long.parseLong(post_id);
+        this.user_id_ = Long.parseLong(user_id);
         this.contenu_ = post;
         this.user_ = user;
 
         this.score_ = 10;
         this.liste_c = new ArrayList<Comment>();
 
-        this.commentersIndex_ = new HashMap<Integer, Integer>();
+        this.commentersIndex_ = new HashMap<Long, Integer>();
     }
 
     @Override
@@ -64,12 +64,12 @@ public class Post implements Item {
     }
 
     @Override
-    public int getId_() {
+    public long getId_() {
         return id_;
     }
 
     @Override
-    public int getUser_id_() {
+    public long getUser_id_() {
         return user_id_;
     }
 
@@ -103,9 +103,9 @@ public class Post implements Item {
         }
     }
 
-    public void scoreDecrement(DateTime cur_time, int user_id) {
+    public void scoreDecrement(DateTime cur_time, long user_id) {
         int numDate = Days.daysBetween(getTs_(), cur_time).getDays();
-        List<Integer> user_id_list = new ArrayList<Integer>();
+        List<Long> user_id_list = new ArrayList<Long>();
         if (this.score_ > 0) {
             this.score_ = 10 - numDate;
             if (this.score_ < 0) {
@@ -115,7 +115,7 @@ public class Post implements Item {
 //        setLifeDays(Days.daysBetween(getTs_(), cur_time).getDays() - numDate);
         for (Comment c : liste_c) {
             if (c.scoreDecrement(cur_time, user_id, user_id_list)) {
-                for (int zero_score_user_id : user_id_list) {
+                for (long zero_score_user_id : user_id_list) {
                     commentersIndex_.put(zero_score_user_id, commentersIndex_.get(zero_score_user_id) - 1);
                     if (commentersIndex_.get(zero_score_user_id) == 0)
                         commentersIndex_.remove(zero_score_user_id);

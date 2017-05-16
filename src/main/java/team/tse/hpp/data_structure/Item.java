@@ -14,9 +14,9 @@ public interface Item {
 
     DateTimeFormatter getFormat_();
 
-    int getId_();
+    long getId_();
 
-    int getUser_id_();
+    long getUser_id_();
 
     String getContenu_();
 
