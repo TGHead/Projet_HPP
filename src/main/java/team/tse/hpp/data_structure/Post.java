@@ -93,6 +93,12 @@ public class Post implements Item {
 //        return commenters_;
         return commentersIndex_.size();
     }
+    public long getCommentId(int idx){
+    	return liste_c.get(idx).getId_();
+    }
+    public int getCommentSize(){
+    	return liste_c.size();
+    }
 
     @Override
     public void CommentersIncrement(Comment comment) {

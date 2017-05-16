@@ -95,6 +95,9 @@ public class ResultList implements Runnable{
 			p.scoreDecrement(item.getTs_(),item.getUser_id_());
 			if(p.getSumScore() == 0 || (p.getSumScore() == 10 && p.getScore_() == 0)) {
 //				this.postMap_.remove(entry.getKey());
+				for(int i=0;i<p.getCommentSize();i++){
+					commentMap_.remove(p.getCommentId(i));
+				}
 				it.remove();
 			}
 			else
