@@ -47,7 +47,6 @@ public class PostReader implements Runnable{
         try {
 			queuePost.put(endRead);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         

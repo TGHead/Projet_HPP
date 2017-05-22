@@ -66,7 +66,6 @@ public class CommentReader implements Runnable {
 				commentList_.put(comment);
 
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			comment = commentRead(commentReader);
@@ -81,7 +80,6 @@ public class CommentReader implements Runnable {
         try {
             commentList_.put(new Comment("2010-02-01T05:12:32.921+0000", "-1", "-1", " ", " ", "-1", "-1"));
         } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 	        
 			
