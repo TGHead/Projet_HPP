@@ -1,7 +1,8 @@
-package team.tse.hpp;
+package team.tse.hpp.data_structure;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
+import team.tse.hpp.data_structure.Comment;
 
 /**
  * Created by TGHead on 2017/4/28.
@@ -13,9 +14,9 @@ public interface Item {
 
     DateTimeFormatter getFormat_();
 
-    int getId_();
+    long getId_();
 
-    int getUser_id_();
+    long getUser_id_();
 
     String getContenu_();
 
@@ -25,16 +26,10 @@ public interface Item {
 
     int getCommenters_();
 
-    void CommentersIncrement(Comment comment);
-
-//    void setLifeDays(int days);
-
-    void scoreDecrement(DateTime cur_time);
+//    void CommentersIncrement(Comment comment);
 
     int getSumScore();
 
-    int getLifeDays();
-
-    boolean AddComment(Comment comment);
+//    boolean AddComment(Comment comment);
 
 }

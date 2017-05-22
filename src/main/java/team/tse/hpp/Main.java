@@ -1,6 +1,11 @@
 package team.tse.hpp;
 
-import org.joda.time.DateTime;
+import team.tse.hpp.Consumer.ResultList;
+import team.tse.hpp.data_structure.Item;
+import team.tse.hpp.data_structure.Post;
+import team.tse.hpp.producer.CommentReader;
+import team.tse.hpp.producer.Integrator;
+import team.tse.hpp.producer.PostReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,7 +34,7 @@ public class Main {
     private Integrator integrator_;
 
     private ResultList result_;
-
+    private ArrayList<String> resLine_ = new ArrayList<String>();
     public Main(String postfilepath, String commentfilepath) {
 //        this.postfilepath_ = postfilepath;
 //        this.commentfilepath_ = commentfilepath;
@@ -45,29 +50,29 @@ public class Main {
         this.commentReader_ = new CommentReader(commentQueue_, commentfilepath);
         this.integrator_ = new Integrator(itemsQueue_, postQueue_, commentQueue_);
         
-        this.result_ = new ResultList(this.listResult_);
+        this.result_ = new ResultList(this.listResult_,this.itemsQueue_,this.resLine_);
 
     }
 
-    private String showResult() {
-        String sout = result_.getCurrentTime().toString(this.itemsQueue_.poll().getFormat_()) + ",";
-        for (int i = 0; i < Math.min(3, this.listResult_.size()); i++) {
-            sout += this.listResult_.get(i).getId_() + ","
-                    + this.listResult_.get(i).getUser_() + ","
-                    + this.listResult_.get(i).getSumScore() + ","
-                    + this.listResult_.get(i).getCommenters_();
-            if (i < 2) {
-                sout += ",";
-            }
-        }
-        for (int i = 0; i < 3 - this.listResult_.size(); i++) {
-            sout += "-,-,-,-";
-            if (i < 2 - this.listResult_.size()) {
-                sout += ",";
-            }
-        }
-        return sout;
-    }
+//    private String showResult() {
+//        String sout = result_.getCurrentTime().toString(this.itemsQueue_.poll().getFormat_()) + ",";
+//        for (int i = 0; i < Math.min(3, this.listResult_.size()); i++) {
+//            sout += this.listResult_.get(i).getId_() + ","
+//                    + this.listResult_.get(i).getUser_() + ","
+//                    + this.listResult_.get(i).getSumScore() + ","
+//                    + this.listResult_.get(i).getCommenters_();
+//            if (i < 2) {
+//                sout += ",";
+//            }
+//        }
+//        for (int i = 0; i < 3 - this.listResult_.size(); i++) {
+//            sout += "-,-,-,-";
+//            if (i < 2 - this.listResult_.size()) {
+//                sout += ",";
+//            }
+//        }
+//        return sout;
+//    }
 
 //    public void run() {
 //        file_.packList();
@@ -85,31 +90,36 @@ public class Main {
         Thread th_post = new Thread(postReader_);
         Thread th_comment = new Thread(commentReader_);
         Thread th_integrator = new Thread(integrator_);
+        Thread th_consume = new Thread(result_);
 
         th_post.setName("PostReader");
         th_comment.setName("CommentReader");
         th_integrator.setName("Integrator");
+        th_consume.setName("Cosumer");
 
         th_post.start();
         th_comment.start();
         th_integrator.start();
+        th_consume.start();
 
         try {
             th_post.join();
             th_comment.join();
             th_integrator.join();
+            th_consume.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
 
-        ArrayList<String> resLine = new ArrayList<String>();
-        for (Item item : this.itemsQueue_) {
-            this.result_.consumeItem(item);
-            if (this.result_.getListeChanged()) {
-                resLine.add(showResult());
-            }
-        }
-        return resLine;
+        
+//        for (Item item : this.itemsQueue_) {
+//            this.result_.consumeItem(item);
+//            if (this.result_.getListeChanged()) {
+//                resLine.add(showResult());
+//            }
+//        }
+        
+        return resLine_;
     }
 }
