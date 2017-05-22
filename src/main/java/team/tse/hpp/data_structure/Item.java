@@ -26,10 +26,10 @@ public interface Item {
 
     int getCommenters_();
 
-    void CommentersIncrement(Comment comment);
+//    void CommentersIncrement(Comment comment);
 
     int getSumScore();
 
-    boolean AddComment(Comment comment);
+//    boolean AddComment(Comment comment);
 
 }

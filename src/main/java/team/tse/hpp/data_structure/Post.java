@@ -25,7 +25,7 @@ public class Post implements Item {
     protected String user_;
     protected int score_;// record the score of this post
 
-    protected HashMap<Long, Integer> commentersIndex_;
+    private HashMap<Long, Integer> commentersIndex_;
 
 
     public Post(String ts, String post_id, String user_id, String post, String user) {
@@ -100,7 +100,6 @@ public class Post implements Item {
     	return liste_c.size();
     }
 
-    @Override
     public void CommentersIncrement(Comment comment) {
         if (this.commentersIndex_.containsKey(comment.getUser_id_())) {
             commentersIndex_.put(comment.getUser_id_(), commentersIndex_.get(comment.getUser_id_()) + 1);
@@ -145,7 +144,6 @@ public class Post implements Item {
         return sum;
     }
 
-    @Override
     public boolean AddComment(Comment comment) {
 //        if (comment.getPost_commented_() == this.id_ || comment.getComment_replied_() == this.id_) {
             CommentersIncrement(comment);

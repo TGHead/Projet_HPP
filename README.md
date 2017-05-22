@@ -8,6 +8,14 @@ more information on : [DEBS 2016](http://www.ics.uci.edu/~debs2016/call-grand-ch
 
 ## Project Structure:
 
+### Data Structure:
+Here's the class diagram for the base data structure:
+
+![DS Schema](README/DS%20schema.png)
+
 ### Producer Schema:
 
-![Producer Schema](README/Producer%20Schema.jpg)
+![Producer Schema](README/Producer%20Schema.png)
+
+### Consumer Schema:
+

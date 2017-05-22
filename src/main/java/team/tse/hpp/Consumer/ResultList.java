@@ -73,7 +73,7 @@ public class ResultList implements Runnable{
                 sout += ",";
             }
         }
-        System.out.println(sout);
+//        System.out.println(sout);
         return sout;
     }
 	public DateTime getCurrentTime() {
