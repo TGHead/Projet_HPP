@@ -48,26 +48,26 @@ public class Comment extends Post {
         return this.post_commented_;
     }
 
-    public boolean scoreDecrement(DateTime cur_time, long user_id, List<Long> user_id_list) {
+    public boolean commentscoreDecrement(DateTime cur_time) {
         int numDate = Days.daysBetween(getTs_(), cur_time).getDays();
         boolean score_zero = false;
 
-        for (Comment c : liste_c) {
-            if (c.scoreDecrement(cur_time, user_id, user_id_list)) {
-                for (long zero_score_user_id : user_id_list) {
-                    commentersIndex_.put(zero_score_user_id, commentersIndex_.get(zero_score_user_id) - 1);
-                    if (commentersIndex_.get(zero_score_user_id) == 0)
-                        commentersIndex_.remove(zero_score_user_id);
-                }
-                score_zero = true;
-            }
-        }
+//        for (Comment c : liste_c) {
+//            if (c.scoreDecrement(cur_time, user_id_list)) {
+//                for (long zero_score_user_id : user_id_list) {
+//                    commentersIndex_.put(zero_score_user_id, commentersIndex_.get(zero_score_user_id) - 1);
+//                    if (commentersIndex_.get(zero_score_user_id) == 0)
+//                        commentersIndex_.remove(zero_score_user_id);
+//                }
+//                score_zero = true;
+//            }
+//        }
 
         if (getScore_() > 0) {
             this.score_ = 10 - numDate;
             if (this.score_ <= 0) {
                 this.score_ = 0;
-                user_id_list.add(getUser_id_());
+//                user_id_list.add(getUser_id_());
                 score_zero = true;
             }
         }

@@ -17,7 +17,7 @@ import org.joda.time.format.DateTimeFormatter;
 public class Post implements Item {
 
     DateTimeFormatter format_;
-    protected ArrayList<Comment> liste_c;
+    private ArrayList<Comment> liste_c;
     protected DateTime ts_;
     protected long id_;
     protected long user_id_;
@@ -109,9 +109,9 @@ public class Post implements Item {
         }
     }
 
-    public void scoreDecrement(DateTime cur_time, long user_id) {
+    public void scoreDecrement(DateTime cur_time) {
         int numDate = Days.daysBetween(getTs_(), cur_time).getDays();
-        List<Long> user_id_list = new ArrayList<Long>();
+//        List<Long> user_id_list = new ArrayList<Long>();
         if (this.score_ > 0) {
             this.score_ = 10 - numDate;
             if (this.score_ < 0) {
@@ -120,13 +120,18 @@ public class Post implements Item {
         }
 //        setLifeDays(Days.daysBetween(getTs_(), cur_time).getDays() - numDate);
         for (Comment c : liste_c) {
-            if (c.scoreDecrement(cur_time, user_id, user_id_list)) {
-                for (long zero_score_user_id : user_id_list) {
-                    commentersIndex_.put(zero_score_user_id, commentersIndex_.get(zero_score_user_id) - 1);
-                    if (commentersIndex_.get(zero_score_user_id) == 0)
-                        commentersIndex_.remove(zero_score_user_id);
-                }
-                user_id_list.clear();
+//            if (c.scoreDecrement(cur_time, user_id_list)) {
+//                for (long zero_score_user_id : user_id_list) {
+//                    commentersIndex_.put(zero_score_user_id, commentersIndex_.get(zero_score_user_id) - 1);
+//                    if (commentersIndex_.get(zero_score_user_id) == 0)
+//                        commentersIndex_.remove(zero_score_user_id);
+//                }
+//                user_id_list.clear();
+//            }
+            if (c.commentscoreDecrement(cur_time)) {
+                commentersIndex_.put(c.getUser_id_(), commentersIndex_.get(c.getUser_id_()) - 1);
+                if (commentersIndex_.get(c.getUser_id_()) == 0)
+                    commentersIndex_.remove(c.getUser_id_());
             }
         }
     }

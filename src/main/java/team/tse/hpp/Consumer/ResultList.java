@@ -92,7 +92,7 @@ public class ResultList implements Runnable{
 		while(it.hasNext()){
 			Entry<Long, Post> entry = it.next();
 			Post p =entry.getValue();
-			p.scoreDecrement(item.getTs_(),item.getUser_id_());
+			p.scoreDecrement(item.getTs_());
 			if(p.getSumScore() == 0 || (p.getSumScore() == 10 && p.getScore_() == 0)) {
 //				this.postMap_.remove(entry.getKey());
 				for(int i=0;i<p.getCommentSize();i++){
