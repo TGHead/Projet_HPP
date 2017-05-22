@@ -90,7 +90,7 @@ public class Main {
         Thread th_post = new Thread(postReader_);
         Thread th_comment = new Thread(commentReader_);
         Thread th_integrator = new Thread(integrator_);
-        Thread th_consume=new Thread(result_);
+        Thread th_consume = new Thread(result_);
 
         th_post.setName("PostReader");
         th_comment.setName("CommentReader");
