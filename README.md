@@ -19,7 +19,7 @@ Here's the class diagram for the base data structure:
 
 ### Consumer Schema:
 
-![Consumer Schema](README/ConsumerSchema.png)
+![Consumer Schema](README/ConsumerSchema.PNG)
 
 ## JUnit Test:
 
