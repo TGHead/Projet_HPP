@@ -136,7 +136,11 @@ public class ResultList implements Runnable {
                         }
                         else if(newResult.get(i).getSumScore() == p.getSumScore()) {
                             if(newResult.get(i).getTs_().compareTo(p.getTs_()) < 0) {
-                                newResult.add(i, p); break;
+                                if(i == 0) {
+                                    newResult.add(i, p);
+                                    break;
+                                }
+                                else continue;
                             }
                             else if(i < 2){
                                 newResult.add(i + 1, p); break;

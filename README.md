@@ -23,6 +23,7 @@ Here's the class diagram for the base data structure:
 ## JUnit Test:
 
 ### Test Data Modification:
+For passing the simple tests, we have to modify some records in the `_expectedQ1.txt` to let the test data 
 
 ### JUnit Test Result:
 
@@ -52,5 +53,30 @@ t.t.h.TestBenchmark_Sample.test    10000  thrpt        5    0.156        0.008  
 
 According to the debit, we suppose that the average debit in [1650, 1700]<br/>
 588,652 / 1675 = 351.43s (5.86 mins) for 100MB data.<br/>
-1.47GB / 100MB = 15.0528<br/>
-15.0528 * 5.86 mins = 88.21 mins (1h29mins)
+3.53GB / 100MB = 36.1472<br/>
+36.1472 * 5.86 mins = 211.82 mins (3h32mins)
+
+### 100MB Data Test:
+
+Here's a result of *100MB* data test: (Unfinished)
+
+```
+# VM invoker: C:\Program Files\Java\jdk1.8.0_102\jre\bin\java.exe
+# VM options: -javaagent:D:\Outils\JetBrains\IntelliJ IDEA Community Edition 2017.1\lib\idea_rt.jar=51866:D:\Outils\JetBrains\IntelliJ IDEA Community Edition 2017.1\bin -Dfile.encoding=UTF-8
+# Warmup: 5 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: team.tse.hpp.TestBenchmark_100MB.test
+
+# Run progress: 0.00% complete, ETA 00:00:10
+# Fork: 1 of 1
+# Warmup Iteration   1: 5700.732 s/op
+# Warmup Iteration   2: 4713.467 s/op
+# Warmup Iteration   3: 4290.647 s/op
+# Warmup Iteration   4: 
+Process finished with exit code 1
+```
+
+By the result of the test, we found that the actual situation isn't the same as we expected cause running 100MB (35.3MB for post and 81.5MB for comment 116.8MB total).<br/>
+For running this 100MB test, we need at least `4290.647 s (1h 12mins) >> 5.86 mins(by calculation)`.
