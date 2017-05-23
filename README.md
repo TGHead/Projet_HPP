@@ -23,7 +23,24 @@ Here's the class diagram for the base data structure:
 ## JUnit Test:
 
 ### Test Data Modification:
-For passing the simple tests, we have to modify some records in the `_expectedQ1.txt` to let the test data 
+For passing the simple tests, we have to modify some records in the `_expectedQ1.txt` to let the test data follow the same output strategy:
+1. A new output record should be based on the timestamp of the new input event.
+2. We don't consider the situation of clearing the `HashMap` when there isn't new input event any more.
+
+#### Example 1:
+
+#### Example 2:
+
+In Test `Q1Case1`:
+
+>2010-03-21T00:01:01.943+0000,1,Tissa Perera,10,0,-,-,-,-,-,-,-,-
+>2010-03-22T00:01:01.943+0000,2,Tissa Perera,10,0,1,Tissa Perera,9,0,-,-,-,-
+>2010-03-23T00:01:01.943+0000,3,Tissa Perera,10,0,2,Tissa Perera,9,0,1,Tissa Perera,8,0
+>2010-03-24T00:01:01.943+0000,4,Tissa Perera,10,0,3,Tissa Perera,9,0,2,Tissa Perera,8,0
+>2010-03-25T00:01:01.943+0000,5,Tissa Perera,10,0,4,Tissa Perera,9,0,3,Tissa Perera,8,0
+~~2010-04-02T00:01:01.943+0000,5,Tissa Perera,2,0,4,Tissa Perera,1,0,-,-,-,-~~<br/>
+~~2010-04-03T00:01:01.943+0000,5,Tissa Perera,1,0,-,-,-,-,-,-,-,-~~<br/>
+~~2010-04-04T00:01:01.943+0000,-,-,-,-,-,-,-,-,-,-,-,-~~<br/>
 
 ### JUnit Test Result:
 
@@ -31,7 +48,7 @@ For passing the simple tests, we have to modify some records in the `_expectedQ1
 
 ### Test Results:
 
-Here's the result on the machine ThinkPad-X1(I7-4600U @2.7GHz, 8GB RAM):<br/>
+Here's the result on the machine ThinkPad-X1(I7-4600U @2.7GHz, 8GB RAM @1600MHz):<br/>
 
 ```
 # Run complete. Total time: 00:02:33

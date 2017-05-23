@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 public class TestMain {
     private final String[] testname = {"Q1Basic", "Q1Basic2", "Q1BigTest", "Q1Case1", "Q1Case2", "Q1Case3", "Q1Case4", "Q1Case5", "Q1CommentCount", "Q1PostExpiredComment", "Q1PostExpiredComment2"};
-    private int indice = 10;
+    private int indice =10;
 
     private final String postfilepath = "src/test/Test resources/Tests/" + testname[indice] + "/posts.dat";
     private final String commentfilepath = "src/test/Test resources/Tests/" + testname[indice] + "/comments.dat";
